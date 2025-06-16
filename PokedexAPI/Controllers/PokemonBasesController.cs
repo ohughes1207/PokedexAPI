@@ -1,13 +1,11 @@
 ﻿using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
 using PokedexAPI.Data;
 using PokedexAPI.DTOs;
 using PokedexAPI.Mappers;
 using PokedexAPI.Models;
+using PokedexAPI.Services;
 using System.Globalization;
-using System.Transactions;
 
 namespace PokedexAPI.Controllers
 {
@@ -16,10 +14,33 @@ namespace PokedexAPI.Controllers
     public class PokemonBasesController : ControllerBase
     {
         private readonly PokedexContext _context;
+        private PokemonBaseService _pokemonBaseService;
 
-        public PokemonBasesController(PokedexContext context)
+        public PokemonBasesController(PokedexContext context, PokemonBaseService pokemonBaseService)
         {
             _context = context;
+            _pokemonBaseService = pokemonBaseService;
+        }
+        [HttpGet("get-paginated")]
+        public async Task<IActionResult> GetPaginatedBasePokemon(int pageNumber = 1)
+        {
+            var records = await _pokemonBaseService.GetAllPaginatedPokemon(pageNumber);
+
+            return Ok(new
+            {
+                Data = records
+            });
+
+        }
+        [HttpGet("get-all")]
+        public async Task<IActionResult> GetAllBasePokemon()
+        {
+            var records = await _pokemonBaseService.GetAllPokemon();
+            return Ok(new
+            {
+                Data = records
+            });
+
         }
         [HttpPost("upload-base")]
         public async Task<IActionResult> UploadPokemonBase(IFormFile file)
