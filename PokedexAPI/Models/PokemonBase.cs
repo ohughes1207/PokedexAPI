@@ -11,6 +11,6 @@
         public bool IsPseudoLegendary { get; set; }
         public bool IsUltrabeast { get; set; }
         public bool IsMythical { get; set; }
-        public required ICollection<PokemonVariant> Variants { get; set; }
+        public ICollection<PokemonVariant> Variants { get; set; }= new List<PokemonVariant>();
     }
 }
