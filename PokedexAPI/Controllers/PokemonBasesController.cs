@@ -24,12 +24,9 @@ namespace PokedexAPI.Controllers
         [HttpGet("get-paginated")]
         public async Task<IActionResult> GetPaginatedBasePokemon(int pageNumber = 1)
         {
-            var records = await _pokemonBaseService.GetAllPaginatedPokemon(pageNumber);
+            PaginatedPokemonResponse response = await _pokemonBaseService.GetAllPaginatedPokemon(pageNumber);
 
-            return Ok(new
-            {
-                Data = records
-            });
+            return Ok(response);
 
         }
         [HttpGet("get-all")]

@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.EntityFrameworkCore;
 using PokedexAPI.Data;
+using PokedexAPI.DTOs;
 using PokedexAPI.Models;
 using System.Collections;
 using System.ComponentModel;
@@ -20,7 +22,7 @@ namespace PokedexAPI.Services
             List<PokemonBase> records = await _context.Pokemons.ToListAsync();
             return records;
         }
-        public async Task<IEnumerable<PokemonBase>> GetAllPaginatedPokemon(int page)
+        public async Task<PaginatedPokemonResponse> GetAllPaginatedPokemon(int page)
         {
             int limit = 50;
             int count = await _context.Pokemons.CountAsync();
@@ -37,9 +39,18 @@ namespace PokedexAPI.Services
                 total_pages = (count / limit)+1;
             }
 
-            var records = _context.Pokemons.Skip(skip).Take(limit).ToList();
+            var records = await _context.Pokemons.Skip(skip).Take(limit).ToListAsync();
 
-            return records;
+            var response = new PaginatedPokemonResponse
+            {
+                Data = records,
+                Total = count,
+                Page = page,
+                PerPage = limit,
+                TotalPages = total_pages
+            };
+
+            return response;
         }
     }
 }
