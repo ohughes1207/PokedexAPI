@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PokedexAPI.Data;
+using PokedexAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Use in memory database for testing
 builder.Services.AddDbContext<PokedexContext>(options => options.UseInMemoryDatabase("PokedexDB"));
+
+builder.Services.AddTransient<PokemonBaseService>();
 
 
 builder.Services.AddControllers();
