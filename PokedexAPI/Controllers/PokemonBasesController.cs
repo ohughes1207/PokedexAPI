@@ -21,6 +21,67 @@ namespace PokedexAPI.Controllers
             _context = context;
             _pokemonBaseService = pokemonBaseService;
         }
+
+        [HttpGet("get-filtered")]
+        public async Task<IActionResult> GetFilteredPokemon(
+            string searchQuery = "",
+            string T1 = "",
+            string T2 = "",
+            bool Legendary = false,
+            int genValue = 0,
+            bool Paradox = false,
+            bool Pseudo = false,
+            bool Ultrabeast = false,
+            bool Myth = false,
+            bool Regional = false,
+            bool Mega=false,
+            int page=1)
+        {
+            PaginatedPokemonResponse response = await _pokemonBaseService.GetPokemonByFilter(searchQuery.ToLower(), T1, T2, genValue, Legendary, Paradox, Pseudo, Ultrabeast, Myth, Regional, Mega, page);
+
+
+            if (response.Data.Count() == 0)
+            {
+                return BadRequest(new
+                {
+                    message = "Pokemon not found!"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    data = response.Data,
+                    total = response.Total,
+                    page = response.Page,
+                    perPage = response.PerPage,
+                    totalPages = response.TotalPages
+                });
+            }
+
+        }
+        [HttpGet("get-by-name")]
+        public async Task<IActionResult> GetPaginatedBasePokemon(string searchQuery = "")
+        {
+            IEnumerable<PokemonBase> response = await _pokemonBaseService.GetPokemonByName(searchQuery);
+
+
+            if (response.Count() == 0)
+            {
+                return BadRequest(new
+                {
+                    message = "Pokemon not found!"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    data = response
+                });
+            }
+
+        }
         [HttpGet("get-paginated")]
         public async Task<IActionResult> GetPaginatedBasePokemon(int pageNumber = 1)
         {
