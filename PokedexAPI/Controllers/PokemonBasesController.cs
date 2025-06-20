@@ -42,7 +42,7 @@ namespace PokedexAPI.Controllers
 
             if (response.Data.Count() == 0)
             {
-                return BadRequest(new
+                return NotFound(new
                 {
                     message = "Pokemon not found!"
                 });
@@ -68,7 +68,7 @@ namespace PokedexAPI.Controllers
 
             if (response.Count() == 0)
             {
-                return BadRequest(new
+                return NotFound(new
                 {
                     message = "Pokemon not found!"
                 });
