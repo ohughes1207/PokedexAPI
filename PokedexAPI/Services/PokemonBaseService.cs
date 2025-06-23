@@ -45,34 +45,7 @@ namespace PokedexAPI.Services
                 total_pages = (count / limit)+1;
             }
 
-            var records = await _context.Pokemons.Skip(skip).Take(limit).Select(p => new PokemonBaseResponseDto
-            {
-                PokedexNum = p.PokedexNum,
-                BaseName = p.BaseName,
-                Generation = p.Generation,
-                IsLegendary = p.IsLegendary,
-                IsMythical = p.IsMythical,
-                IsParadox = p.IsParadox,
-                IsPseudoLegendary = p.IsPseudoLegendary,
-                IsUltrabeast = p.IsUltrabeast,
-                Variants = p.Variants.Select(v => new PokemonVariantResponseDto
-                { 
-                    PokedexNum = v.PokedexNum,
-                    VariantName = v.VariantName,
-                    PokemonType1 = v.Type1,
-                    PokemonType2 = v.Type2,
-                    Attack = v.Attack,
-                    Defense = v.Defense,
-                    SpecialAttack = v.SPAttack,
-                    SpecialDefense = v.SPDefense,
-                    Speed = v.Speed,
-                    TotalStats = v.TotalStats,
-                    HP = v.HP,
-                    IsMega = v.IsMega,
-                    IsRegional = v.IsRegional,
-                    ImageName = v.ImgName,
-                }).ToList()
-            }).ToListAsync();
+            var records = await PokemonProjections.ToPokemonBaseResponseDto(_context.Pokemons).ToListAsync();
 
             var response = new PaginatedPokemonResponseDto
             {
@@ -165,34 +138,7 @@ namespace PokedexAPI.Services
                 total_pages = (count / limit) + 1;
             }
 
-            var records = await _context.Pokemons.Skip(skip).Take(limit).Select(p => new PokemonBaseResponseDto
-            {
-                PokedexNum = p.PokedexNum,
-                BaseName = p.BaseName,
-                Generation = p.Generation,
-                IsLegendary = p.IsLegendary,
-                IsMythical = p.IsMythical,
-                IsParadox = p.IsParadox,
-                IsPseudoLegendary = p.IsPseudoLegendary,
-                IsUltrabeast = p.IsUltrabeast,
-                Variants = p.Variants.Select(v => new PokemonVariantResponseDto
-                {
-                    PokedexNum = v.PokedexNum,
-                    VariantName = v.VariantName,
-                    PokemonType1 = v.Type1,
-                    PokemonType2 = v.Type2,
-                    Attack = v.Attack,
-                    Defense = v.Defense,
-                    SpecialAttack = v.SPAttack,
-                    SpecialDefense = v.SPDefense,
-                    Speed = v.Speed,
-                    TotalStats = v.TotalStats,
-                    HP = v.HP,
-                    IsMega = v.IsMega,
-                    IsRegional = v.IsRegional,
-                    ImageName = v.ImgName,
-                }).ToList()
-            }).ToListAsync();
+            var records = await PokemonProjections.ToPokemonBaseResponseDto(_context.Pokemons).ToListAsync();
 
             var response = new PaginatedPokemonResponseDto
             {

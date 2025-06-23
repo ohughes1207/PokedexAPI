@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PokedexAPI.Data;
+using PokedexAPI.DTOs;
 using PokedexAPI.Models;
 
 namespace PokedexAPI.Services
@@ -12,9 +13,10 @@ namespace PokedexAPI.Services
         {
             _context = context;
         }
-        public async Task<IEnumerable<PokemonType>> GetAllPokemonTypes()
+        public async Task<IEnumerable<PokemonTypeDto>> GetAllPokemonTypes()
         {
-            List<PokemonType> records = await _context.PokemonTypes.ToListAsync();
+            List<PokemonTypeDto> records = await PokemonProjections.ToPokemonTypeDto(_context.PokemonTypes).ToListAsync();
+
             return records;
         }
     }
