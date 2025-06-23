@@ -3,6 +3,7 @@
     public class PokemonBaseResponseDto
     {
         public int PokedexNum { get; set; }
+        public int BaseId { get; set; }
         public required string BaseName { get; set; }
         public int Generation { get; set; }
         public bool IsLegendary { get; set; }
