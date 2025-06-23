@@ -3,6 +3,7 @@
     public class PokemonVariantResponseDto
     {
         public int PokedexNum { get; set; }
+        public int VarId { get; set; }
         public required string VariantName { get; set; }
         public required string PokemonType1 { get; set; }
         public string? PokemonType2 { get; set; }
