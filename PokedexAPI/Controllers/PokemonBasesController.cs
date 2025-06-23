@@ -37,7 +37,7 @@ namespace PokedexAPI.Controllers
             bool Mega=false,
             int page=1)
         {
-            PaginatedPokemonResponse response = await _pokemonBaseService.GetPokemonByFilter(searchQuery.ToLower(), T1, T2, genValue, Legendary, Paradox, Pseudo, Ultrabeast, Myth, Regional, Mega, page);
+            PaginatedPokemonResponseDto response = await _pokemonBaseService.GetPokemonByFilter(searchQuery.ToLower(), T1, T2, genValue, Legendary, Paradox, Pseudo, Ultrabeast, Myth, Regional, Mega, page);
 
 
             if (response.Data.Count() == 0)
@@ -85,7 +85,7 @@ namespace PokedexAPI.Controllers
         [HttpGet("get-paginated")]
         public async Task<IActionResult> GetPaginatedBasePokemon(int pageNumber = 1)
         {
-            PaginatedPokemonResponse response = await _pokemonBaseService.GetAllPaginatedPokemon(pageNumber);
+            PaginatedPokemonResponseDto response = await _pokemonBaseService.GetAllPaginatedPokemon(pageNumber);
 
             return Ok(response);
 
@@ -112,7 +112,7 @@ namespace PokedexAPI.Controllers
                 using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
                 csv.Context.RegisterClassMap<PokemonBaseCsvDtoMap>();
 
-                var records = csv.GetRecords<PokemonBaseCsvDto>().ToList();
+                var records = csv.GetRecords<CsvUploadPokemonBaseDto>().ToList();
 
                 var existingPokedexNums = new HashSet<int>();
 

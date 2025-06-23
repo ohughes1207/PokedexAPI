@@ -1,6 +1,6 @@
 ﻿namespace PokedexAPI.DTOs
 {
-    public class PokemonBaseCsvDto
+    public class CsvUploadPokemonBaseDto
     {
         public int PokedexNum { get; set; }
         public required string BaseName { get; set; }

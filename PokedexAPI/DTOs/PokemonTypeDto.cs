@@ -1,6 +1,7 @@
 ﻿namespace PokedexAPI.DTOs
 {
-    public class PokemonTypeCsvDTO
+    //No Dto specialized for Response or CsvUpload since Dto would be the same in both cases
+    public class PokemonTypeDto
     {
         public required string TypeName { get; set; }
         public float DefVsGrass { get; set; }

@@ -3,7 +3,7 @@ using PokedexAPI.DTOs;
 
 namespace PokedexAPI.Mappers
 {
-    public class PokemonTypeCsvDtoMap : ClassMap<PokemonTypeCsvDTO>
+    public class PokemonTypeCsvDtoMap : ClassMap<PokemonTypeDto>
     {
         public PokemonTypeCsvDtoMap()
         {

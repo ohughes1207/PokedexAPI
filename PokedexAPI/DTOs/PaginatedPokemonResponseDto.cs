@@ -2,7 +2,7 @@
 
 namespace PokedexAPI.DTOs
 {
-    public class PaginatedPokemonResponse
+    public class PaginatedPokemonResponseDto
     {
         public required IEnumerable<PokemonBase> Data { get; set; }
         public required int Total { get; set; }

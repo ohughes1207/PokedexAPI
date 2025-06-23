@@ -28,7 +28,7 @@ namespace PokedexAPI.Services
 
             return records;
         }
-        public async Task<PaginatedPokemonResponse> GetAllPaginatedPokemon(int page)
+        public async Task<PaginatedPokemonResponseDto> GetAllPaginatedPokemon(int page)
         {
             int limit = 50;
             int count = await _context.Pokemons.CountAsync();
@@ -47,7 +47,7 @@ namespace PokedexAPI.Services
 
             var records = await _context.Pokemons.Skip(skip).Take(limit).ToListAsync();
 
-            var response = new PaginatedPokemonResponse
+            var response = new PaginatedPokemonResponseDto
             {
                 Data = records,
                 Total = count,
@@ -59,7 +59,7 @@ namespace PokedexAPI.Services
             return response;
         }
 
-        public async Task<PaginatedPokemonResponse> GetPokemonByFilter(string searchQuery, string T1, string T2, int genValue, bool Legendary, bool Paradox, bool Pseudo, bool Ultrabeast, bool Myth, bool Regional, bool Mega, int page)
+        public async Task<PaginatedPokemonResponseDto> GetPokemonByFilter(string searchQuery, string T1, string T2, int genValue, bool Legendary, bool Paradox, bool Pseudo, bool Ultrabeast, bool Myth, bool Regional, bool Mega, int page)
         {
             var query = _context.Pokemons.AsQueryable();
 
@@ -140,7 +140,7 @@ namespace PokedexAPI.Services
 
             var records = await query.Skip(skip).Take(limit).ToListAsync();
 
-            var response = new PaginatedPokemonResponse
+            var response = new PaginatedPokemonResponseDto
             {
                 Data = records,
                 Total = count,

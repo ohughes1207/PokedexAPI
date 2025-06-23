@@ -36,7 +36,7 @@ namespace PokedexAPI.Controllers
                 using var reader = new StreamReader(file.OpenReadStream());
                 using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
                 csv.Context.RegisterClassMap<PokemonVariantCsvDtoMap>();
-                var records = csv.GetRecords<PokemonVariantCsvDTO>().ToList();
+                var records = csv.GetRecords<CsvUploadPokemonVariantDto>().ToList();
 
                 // Load related entities into memory
                 var pokemonLookup = await _context.Pokemons
