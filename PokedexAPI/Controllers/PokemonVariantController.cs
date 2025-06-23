@@ -23,7 +23,7 @@ namespace PokedexAPI.Controllers
             _context = context;
             _pokemonVariantsService = pokemonVariantsService;
         }
-        [HttpPost("upload-variants")]
+        [HttpPost("upload")]
         public async Task<IActionResult> UploadPokemonVariants(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -70,7 +70,7 @@ namespace PokedexAPI.Controllers
                         VariantName = dto.VariantName,
                         Type1 = dto.PokemonType1,
                         Type1Rel = type1,
-                        Type2 = dto.PokemonType2,
+                        Type2 = string.IsNullOrWhiteSpace(dto.PokemonType2) ? null : dto.PokemonType2,
                         Type2Rel = type2,
                         TotalStats = dto.TotalStats,
                         HP = dto.HP,
@@ -99,10 +99,17 @@ namespace PokedexAPI.Controllers
                 return StatusCode(500, $"Upload failed: {ex.Message}");
             }
         }
-        [HttpGet("pokemon-variants")]
+        [HttpGet("")]
         public async Task<IActionResult> GetAllPokemonVariants()
         {
             var response = await _pokemonVariantsService.GetAllPokemonVariants();
+
+            return Ok(response);
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> GetVariantBySearch(string searchQuery)
+        {
+            var response = await _pokemonVariantsService.GetVariantBySearch(searchQuery);
 
             return Ok(response);
         }

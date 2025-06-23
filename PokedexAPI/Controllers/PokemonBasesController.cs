@@ -11,18 +11,18 @@ namespace PokedexAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PokemonBasesController : ControllerBase
+    public class PokemonBaseController : ControllerBase
     {
         private readonly PokedexContext _context;
         private PokemonBaseService _pokemonBaseService;
 
-        public PokemonBasesController(PokedexContext context, PokemonBaseService pokemonBaseService)
+        public PokemonBaseController(PokedexContext context, PokemonBaseService pokemonBaseService)
         {
             _context = context;
             _pokemonBaseService = pokemonBaseService;
         }
 
-        [HttpGet("get-filtered")]
+        [HttpGet("filtered")]
         public async Task<IActionResult> GetFilteredPokemon(
             string searchQuery = "",
             string T1 = "",
@@ -60,8 +60,8 @@ namespace PokedexAPI.Controllers
             }
 
         }
-        [HttpGet("get-by-name")]
-        public async Task<IActionResult> GetPaginatedBasePokemon(string searchQuery = "")
+        [HttpGet("search")]
+        public async Task<IActionResult> GetBasePokemonByName(string searchQuery = "")
         {
             IEnumerable<PokemonBase> response = await _pokemonBaseService.GetPokemonByName(searchQuery);
 
@@ -82,7 +82,7 @@ namespace PokedexAPI.Controllers
             }
 
         }
-        [HttpGet("get-paginated")]
+        [HttpGet("paged")]
         public async Task<IActionResult> GetPaginatedBasePokemon(int pageNumber = 1)
         {
             PaginatedPokemonResponseDto response = await _pokemonBaseService.GetAllPaginatedPokemon(pageNumber);
@@ -90,7 +90,7 @@ namespace PokedexAPI.Controllers
             return Ok(response);
 
         }
-        [HttpGet("get-all")]
+        [HttpGet("")]
         public async Task<IActionResult> GetAllBasePokemon()
         {
             var records = await _pokemonBaseService.GetAllPokemon();
@@ -100,7 +100,7 @@ namespace PokedexAPI.Controllers
             });
 
         }
-        [HttpPost("upload-base")]
+        [HttpPost("upload")]
         public async Task<IActionResult> UploadPokemonBase(IFormFile file)
         {
             if (file == null || file.Length == 0)
