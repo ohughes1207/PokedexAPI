@@ -24,7 +24,8 @@ namespace PokedexAPI.Services
             
             List<PokemonVariantSearchResponseDto> variants = await PokemonProjections.ToPokemonVariantSearchResponseDto(_context.Variants.Where(v => v.VariantName.ToLower().Contains(searchQuery.ToLower()))
                 .Include(v => v.Type1Rel)
-                .Include(v => v.Type2Rel)).ToListAsync();//.Include(v => v.Type1).Include(v => v.Type2).ToListAsync();
+                .Include(v => v.Type2Rel))
+                .ToListAsync();
 
             return variants;
         }
