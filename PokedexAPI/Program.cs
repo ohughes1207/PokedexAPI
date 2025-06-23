@@ -11,9 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 //Use in memory database for testing
 builder.Services.AddDbContext<PokedexContext>(options => options.UseInMemoryDatabase("PokedexDB"));
 
-builder.Services.AddTransient<PokemonBaseService>();
-builder.Services.AddTransient<PokemonVariantService>();
-builder.Services.AddTransient<PokemonTypeService>();
+builder.Services.AddScoped<PokemonBaseService>();
+builder.Services.AddScoped<PokemonVariantService>();
+builder.Services.AddScoped<PokemonTypeService>();
 
 
 
