@@ -12,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PokedexContext>(options => options.UseInMemoryDatabase("PokedexDB"));
 
 builder.Services.AddTransient<PokemonBaseService>();
+builder.Services.AddTransient<PokemonVariantService>();
+builder.Services.AddTransient<PokemonTypeService>();
+
 
 
 builder.Services.AddControllers();
