@@ -45,7 +45,7 @@ namespace PokedexAPI.Services
                 total_pages = (count / limit)+1;
             }
 
-            var records = await PokemonProjections.ToPokemonBaseResponseDto(_context.Pokemons).ToListAsync();
+            var records = await PokemonProjections.ToPokemonBaseResponseDto(_context.Pokemons).Skip(skip).Take(limit).ToListAsync();
 
             var response = new PaginatedPokemonResponseDto
             {
@@ -97,21 +97,21 @@ namespace PokedexAPI.Services
             }
             if (!string.IsNullOrEmpty(T1))
             {
-                query = query.Where(p => p.Variants.Any(v => v.Type1Rel.TypeName == T1 || (v.Type2Rel == null || v.Type2Rel.TypeName == T1)));
+                query = query.Where(p => p.Variants.Any(v => v.Type1Rel.TypeName.ToLower()==T1.ToLower() || (v.Type2Rel != null && v.Type2Rel.TypeName.ToLower() == T1.ToLower())));
             }
             if (!string.IsNullOrEmpty(T2))
             {
                 if (T2==T1)
                 {
-                    query = query.Where(p => p.Variants.Any(v => v.Type1Rel.TypeName == T1 && (v.Type2Rel == null || string.IsNullOrEmpty(v.Type2Rel.TypeName))));
+                    query = query.Where(p => p.Variants.Any(v => v.Type1Rel.TypeName.ToLower() == T1.ToLower() && v.Type2Rel == null));
                 }
                 else if (!string.IsNullOrEmpty(T1))
                 {
-                    query = query.Where(p => p.Variants.Any(v => v.Type1Rel.TypeName == T1 && (v.Type2Rel == null || v.Type2Rel.TypeName==T2)) || p.Variants.Any(v => v.Type1Rel.TypeName == T2 && (v.Type2Rel == null || v.Type2Rel.TypeName == T1)));
+                    query = query.Where(p => p.Variants.Any(v => (v.Type1Rel.TypeName.ToLower() == T1.ToLower() && v.Type2Rel != null && v.Type2Rel.TypeName.ToLower() == T2.ToLower()) || (v.Type1Rel.TypeName.ToLower() == T2.ToLower() && v.Type2Rel != null && v.Type2Rel.TypeName.ToLower() == T1.ToLower())));
                 }
                 else
                 {
-                    query = query.Where(p => p.Variants.Any(v => v.Type1Rel.TypeName == T2 || (v.Type2Rel == null || v.Type2Rel.TypeName == T2)));
+                    query = query.Where(p => p.Variants.Any(v => v.Type1Rel.TypeName.ToLower() == T2.ToLower() || (v.Type2Rel != null && v.Type2Rel.TypeName.ToLower() == T2.ToLower())));
                 }
             }
             if (Regional)
@@ -138,7 +138,7 @@ namespace PokedexAPI.Services
                 total_pages = (count / limit) + 1;
             }
 
-            var records = await PokemonProjections.ToPokemonBaseResponseDto(_context.Pokemons).ToListAsync();
+            var records = await PokemonProjections.ToPokemonBaseResponseDto(query).Skip(skip).Take(limit).ToListAsync();
 
             var response = new PaginatedPokemonResponseDto
             {
