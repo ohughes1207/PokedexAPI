@@ -43,6 +43,7 @@ public static class PokemonProjections
         return query.Select(v => new PokemonVariantSearchResponseDto
         {
             PokedexNum = v.PokedexNum,
+            VarId = v.VarId,
             VariantName = v.VariantName,
             PokemonType1 = v.Type1,
             PokemonType2 = v.Type2,
