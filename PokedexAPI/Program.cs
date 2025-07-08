@@ -8,24 +8,25 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // Frontend dev server
+        policy.WithOrigins("https://olli-pokedexwebapp.vercel.app", "http://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
 
+ 
+var connectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DefaultConnection") ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add services to the container.
+builder.Services.AddDbContext<PokedexContext>(options => options.UseNpgsql(connectionString));
 
-//builder.Services.AddDbContext<PokedexContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 //Use in memory database for testing
-builder.Services.AddDbContext<PokedexContext>(options => options.UseInMemoryDatabase("PokedexDB"));
+//builder.Services.AddDbContext<PokedexContext>(options => options.UseInMemoryDatabase("PokedexDB"));
 
 builder.Services.AddScoped<PokemonBaseService>();
 builder.Services.AddScoped<PokemonVariantService>();
 builder.Services.AddScoped<PokemonTypeService>();
-
 
 
 builder.Services.AddControllers();
@@ -35,16 +36,28 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<PokedexContext>();
+    db.Database.Migrate(); // Apply migrations to db, useful for when render db expires and new one is set up
+}
+
+
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 
