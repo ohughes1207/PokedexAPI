@@ -22,85 +22,26 @@ namespace PokedexAPI.Controllers
             _pokemonBaseService = pokemonBaseService;
         }
 
-        [HttpGet("filtered")]
-        public async Task<IActionResult> GetFilteredPokemon(
-            string searchQuery = "",
-            string T1 = "",
-            string T2 = "",
-            bool Legendary = false,
-            int genValue = 0,
-            bool Paradox = false,
-            bool Pseudo = false,
-            bool Ultrabeast = false,
-            bool Myth = false,
-            bool Regional = false,
-            bool Mega=false,
-            int page=1)
+        [HttpGet]
+        public async Task<IActionResult> GetFilteredPokemon([FromQuery] PokemonBaseQueryDto query)
         {
-            PaginatedPokemonResponseDto response = await _pokemonBaseService.GetPokemonByFilter(searchQuery.ToLower(), T1, T2, genValue, Legendary, Paradox, Pseudo, Ultrabeast, Myth, Regional, Mega, page);
+            query.SearchQuery ??= "";
+            query.T1 ??= "";
+            query.T2 ??= "";
 
+            PaginatedPokemonResponseDto response = await _pokemonBaseService.GetPokemonByFilter(query.SearchQuery.ToLower(), query.T1, query.T2, query.GenValue, query.Legendary, query.Paradox, query.Pseudo, query.Ultrabeast, query.Myth, query.Regional, query.Mega, query.Page);
 
-            if (response.Data.Count() == 0)
-            {
-                return NotFound(new
-                {
-                    message = "Pokemon not found!"
-                });
-            }
-            else
-            {
-                return Ok(new
-                {
-                    data = response.Data,
-                    total = response.Total,
-                    page = response.Page,
-                    perPage = response.PerPage,
-                    totalPages = response.TotalPages
-                });
-            }
-
-        }
-        [HttpGet("search")]
-        public async Task<IActionResult> GetBasePokemonByName(string searchQuery = "")
-        {
-            IEnumerable<PokemonBase> response = await _pokemonBaseService.GetPokemonByName(searchQuery);
-
-
-            if (response.Count() == 0)
-            {
-                return NotFound(new
-                {
-                    message = "Pokemon not found!"
-                });
-            }
-            else
-            {
-                return Ok(new
-                {
-                    data = response
-                });
-            }
-
-        }
-        [HttpGet("paged")]
-        public async Task<IActionResult> GetPaginatedBasePokemon(int pageNumber = 1)
-        {
-            PaginatedPokemonResponseDto response = await _pokemonBaseService.GetAllPaginatedPokemon(pageNumber);
-
-            return Ok(response);
-
-        }
-        [HttpGet("")]
-        public async Task<IActionResult> GetAllBasePokemon()
-        {
-            var records = await _pokemonBaseService.GetAllPokemon();
             return Ok(new
             {
-                Data = records
+                data = response.Data,
+                total = response.Total,
+                page = response.Page,
+                perPage = response.PerPage,
+                totalPages = response.TotalPages
             });
 
         }
-        [HttpPost("upload")]
+        [HttpPost]
         public async Task<IActionResult> UploadPokemonBase(IFormFile file)
         {
             if (file == null || file.Length == 0)

@@ -23,7 +23,7 @@ namespace PokedexAPI.Controllers
             _context = context;
             _pokemonVariantsService = pokemonVariantsService;
         }
-        [HttpPost("upload")]
+        [HttpPost]
         public async Task<IActionResult> UploadPokemonVariants(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -99,16 +99,14 @@ namespace PokedexAPI.Controllers
                 return StatusCode(500, $"Upload failed: {ex.Message}");
             }
         }
-        [HttpGet("")]
-        public async Task<IActionResult> GetAllPokemonVariants()
+        [HttpGet]
+        public async Task<IActionResult> GetVariantBySearch(string searchQuery="")
         {
-            var response = await _pokemonVariantsService.GetAllPokemonVariants();
-
-            return Ok(response);
-        }
-        [HttpGet("search")]
-        public async Task<IActionResult> GetVariantBySearch(string searchQuery)
-        {
+            if (string.IsNullOrWhiteSpace(searchQuery))
+            {
+                // Return an empty list if searchQuery is empty or just whitespace
+                return Ok(new List<PokemonVariantSearchResponseDto>());
+            }
             var response = await _pokemonVariantsService.GetVariantBySearch(searchQuery);
 
             return Ok(response);

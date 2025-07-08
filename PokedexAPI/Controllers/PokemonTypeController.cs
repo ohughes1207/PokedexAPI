@@ -22,7 +22,7 @@ namespace PokedexAPI.Controllers
             _pokemonTypeService = pokemonTypeService;
         }
 
-        [HttpPost("upload")]
+        [HttpPost]
         public async Task<IActionResult> UploadPokemonTypes(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -80,7 +80,7 @@ namespace PokedexAPI.Controllers
                 return StatusCode(500, $"Upload failed: {ex.Message}");
             }
         }
-        [HttpGet("")]
+        [HttpGet]
         public async Task<IActionResult> GetAllPokemonTypes()
         {
             var response = await _pokemonTypeService.GetAllPokemonTypes();
